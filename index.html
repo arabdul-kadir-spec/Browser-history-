@@ -1,0 +1,110 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browser History Management System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: #f0f4f8;
+            padding: 25px;
+        }
+        .container {
+            background: white;
+            max-width: 450px;
+            margin: auto;
+            padding: 25px;
+            border-radius: 12px;
+        }
+        input, button {
+            padding: 12px;
+            margin: 6px;
+            width: 85%;
+            box-sizing: border-box;
+        }
+        button {
+            background: #1769aa;
+            color: white;
+            border: none;
+            border-radius: 6px;
+        }
+        #history {
+            overflow-wrap: anywhere;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Browser History Management System</h2>
+    <p>Current page: <strong id="current">Home</strong></p>
+
+    <input id="website" placeholder="Enter website name">
+
+    <button onclick="visit()">Visit Website</button>
+    <button onclick="goBack()">Go Back</button>
+    <button onclick="goForward()">Go Forward</button>
+    <button onclick="showHistory()">View History</button>
+
+    <p id="history"></p>
+</div>
+
+<script>
+    let current = "Home";
+    let backStack = [];
+    let forwardStack = [];
+
+    function update() {
+        document.getElementById("current").textContent = current;
+    }
+
+    function visit() {
+        let website = document.getElementById("website").value.trim();
+
+        if (website === "") {
+            alert("Enter a website name first.");
+            return;
+        }
+
+        backStack.push(current);
+        current = website;
+        forwardStack = [];
+
+        document.getElementById("website").value = "";
+        update();
+    }
+
+    function goBack() {
+        if (backStack.length === 0) {
+            alert("No previous page available.");
+            return;
+        }
+
+        forwardStack.push(current);
+        current = backStack.pop();
+        update();
+    }
+
+    function goForward() {
+        if (forwardStack.length === 0) {
+            alert("No forward page available.");
+            return;
+        }
+
+        backStack.push(current);
+        current = forwardStack.pop();
+        update();
+    }
+
+    function showHistory() {
+        document.getElementById("history").textContent =
+            "Back stack: " + JSON.stringify(backStack) +
+            " | Current: " + current +
+            " | Forward stack: " + JSON.stringify(forwardStack);
+    }
+</script>
+</body>
+</html>
+
